@@ -25,8 +25,8 @@
                 <p>table or someting with city names</p>
             </div>
             <div class="col-9">
-                <div class="row" style="background-color:green; font-size:96px;">
-                    Tokyo
+                <div class="row" id="current_weather" style="background-color:green; font-size:96px;">
+                    
                 </div>
                 <div class="row" style="background-color: blue; font-size:48px;">
                    [SUN][CLOUD][RAIN][FOG][SUN]
@@ -37,35 +37,53 @@
     
 
 <script type="text/javaScript">
-var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=minneapolis&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
 
+///////// CURRENT WEATHER API CALL
+var city = prompt("Enter City");
+var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
-console.log(current);
+//console.log(current);
 console.log(current.name); //city name
+$("#current_weather").html(current.name + "<hr>" + current.weather[0].description);
+
 console.log(current.weather[0].description); //eg scattered clouds
 console.log("cloud icon code: " + current.weather[0].icon); //cloud icon
 console.log(Math.floor(current.main.temp) + " F"); //imperial in API call.
 console.log(current.main.humidity + "% relative humidity"); //humidity
-console.log("Lat: " + current.coord.lat); //lon and lat for UVI search
-console.log("Lon: " + current.coord.lon); //lon and lat for UVI search
+var lat = current.coord.lat; //for UVI search
+var lon = current.coord.lon; //for UVI search
+//////////// END CURRENT WEATHER API
 
-
-});
-
-var uvi = "https://api.openweathermap.org/data/2.5/uvi?lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
+//////////// UVI API CALL
+var uvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
+console.log("------UV INDEX---------")
 console.log("UV index: " + uviInfo.value);
-
-
 });
+////////END UVI API CALL
 
 
-var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
+/////// FIVE DAY API CALL
+var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
-console.log(forecast);
-
+console.log("----------5 day forecast----------------")
+console.log(forecast.list[0].dt_txt);
+console.log(forecast.list[0].weather[0].icon);
+console.log(forecast.list[0].main.feels_like);
+console.log(forecast.list[0].main.humidity + "% relative humidity");
+console.log("---------day 2 --------------------")
+console.log(forecast.list[5].dt_txt);
+console.log(forecast.list[5].weather[0].icon);
+console.log(forecast.list[5].main.feels_like);
+console.log(forecast.list[5].main.humidity + "% relative humidity");
+});
+/////// END FIVE DAY API CALL
 
 });
+
+
+
+
 
 
 
