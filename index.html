@@ -37,7 +37,7 @@
     
 
 <script type="text/javaScript">
-var currentWeather = "http://api.openweathermap.org/data/2.5/weather?q=minneapolis&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
+var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=minneapolis&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
 
 $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
 console.log(current);
@@ -52,7 +52,7 @@ console.log("Lon: " + current.coord.lon); //lon and lat for UVI search
 
 });
 
-var uvi = "http://api.openweathermap.org/data/2.5/uvi?lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
+var uvi = "https://api.openweathermap.org/data/2.5/uvi?lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
 console.log("UV index: " + uviInfo.value);
 
@@ -60,7 +60,7 @@ console.log("UV index: " + uviInfo.value);
 });
 
 
-var fiveDay = "http://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
+var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=35.69&lon=139.69&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
 console.log(forecast);
 
