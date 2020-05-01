@@ -34,7 +34,7 @@
                 <div class="row" id="current_weather">
                     
                 </div>
-                <div class="row" style="background-color: blue; font-size:48px;">
+                <div class="row" style="background-color: #beef; font-size:48px;">
                    [SUN][CLOUD][RAIN][FOG][SUN]
                 </div>
             </div>
@@ -61,10 +61,15 @@ function getWeatherData(city){
        
        // uviCall(lat,lon);
        // fiveDayCall(lat,lon);
+        var weatherIcon = "<img src =\"https://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">"; //TODO movie icons locally
+        $("#current_weather").html(current.name + weatherIcon);
+       
+        var humidity = $("<p>");
+        humidity.text(current.main.humidity + "% relative humidity");
+        $("#current_weather").append(humidity);
+
+
         
-        
-        $("#current_weather").html(current.name + "<img src =\"http://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">");
-        //$("#current_weather").html(city);
     });
 };
 
