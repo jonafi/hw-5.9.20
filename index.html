@@ -6,12 +6,16 @@
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+    <style>
+        h1{color:white; text-align: center;}
+        .page-header{padding:5px;}
+        #current_weather{background-color:white; padding:5px; font-size:44px;}
+    </style>
 </head>
 <body>
     <div class="container-fluid bg-dark">
-        <div class="page-header" style="padding:5px;">
-            <h1 style="color:white; text-align:center;">Weather Dashboard</h1>
+        <div class="page-header">
+            <h1>Weather Dashboard</h1>
         </div>
         <div class="row">
             <div class="col-md-3 bg-light">
@@ -27,7 +31,7 @@
                 </ul>
             </div>
             <div class="col-9">
-                <div class="row" id="current_weather" style="background-color:green; font-size:96px;">
+                <div class="row" id="current_weather">
                     
                 </div>
                 <div class="row" style="background-color: blue; font-size:48px;">
@@ -45,17 +49,21 @@ var city = "syosset"; //TODO set default city to user location
 function getWeatherData(city){
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
     $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
-        //console.log(current);
-        console.log(current.name); //city name
-        console.log(current.weather[0].description); //eg scattered clouds
-        console.log("cloud icon code: " + current.weather[0].icon); //cloud icon
-        console.log(Math.floor(current.main.temp) + " F"); //imperial in API call.
-        console.log(current.main.humidity + "% relative humidity"); //humidity
+        console.log(current);
+        //console.log(current.name); //city name
+        //console.log(current.weather[0].description); //eg scattered clouds
+        //console.log("cloud icon code: " + current.weather[0].icon); //cloud icon
+        //console.log(Math.floor(current.main.temp) + " F"); //imperial in API call.
+        //console.log(current.main.humidity + "% relative humidity"); //humidity
         var lat = current.coord.lat; //for UVI search
         var lon = current.coord.lon; //for UVI search
-        uviCall(lat,lon);
-        fiveDayCall(lat,lon);
-        $("#current_weather").html(current.name + "<br>" + current.weather[0].description);
+       
+       
+       // uviCall(lat,lon);
+       // fiveDayCall(lat,lon);
+        
+        
+        $("#current_weather").html(current.name + "<img src =\"http://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">");
         //$("#current_weather").html(city);
     });
 };
