@@ -8,9 +8,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         h1{color:white; text-align: center;}
-        .page-header{padding:5px;}
-        #current_weather{background-color; padding:5px; font-size:18px;}
-        .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:5px; border-radius: 5px;}
+        body{background-color: lightblue;}
+        .page-header{padding:5px; margin-bottom:10px;}
+        #current_weather{background-color; padding:5px; margin-bottom:10px; font-size:18px;}
+        .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:6px; border-radius: 5px; margin-bottom:10px;}
+        .cw_details{width:100%;}
+        .enbiggin{font-size:40px; font-weight: bolder;}
     </style>
 </head>
 <body>
@@ -19,9 +22,9 @@
     </header>
     <main class="container">
         <article class="row">
-            <section class="col-md-3 bg-info order-last">
+            <section class="col-md-3 order-last">
                 <form>
-                    <input></input>[search icon]
+                    <input></input>[mag]
                 </form>
                <ul class="list-group">
                    <li class="list-group-item">Minneapolis</li>
@@ -36,11 +39,11 @@
                     
                 </div>
                 <div class="row">
-                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
                 </div>
             </section>
         </article>
@@ -60,18 +63,30 @@ function getWeatherData(city){
 
        // uviCall(lat,lon);
        // fiveDayCall(lat,lon);
-        var weatherIcon = "<img src =\"https://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">"; //TODO movie icons locally
-        $("#current_weather").html(current.name + weatherIcon);
+           
+        var displayName = $("<div>");
+        displayName.addClass("cw_details");
+        displayName.addClass("enbiggin");
+        displayName.text(current.name);
+
+    
+        $("#current_weather").html(displayName);
        
-        var temperature = $("<p>");
+        var weatherIcon = "<img src =\"https://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">"; //TODO movie icons locally
+        $("#current_weather").append(weatherIcon);
+
+        var temperature = $("<div>");
+        temperature.addClass("cw_details");
         temperature.html("Temperature: " + Math.floor(current.main.temp) + "&#8457");
         $("#current_weather").append(temperature);
 
-        var humidity = $("<p>");
+        var humidity = $("<div>");
+        humidity.addClass("cw_details")
         humidity.text("Relative Humidity: " + current.main.humidity + "%");
         $("#current_weather").append(humidity);
 
-        var windSpeed = $("<p>");
+        var windSpeed = $("<div>");
+        windSpeed.addClass("cw_details");
         windSpeed.text("Wind Speed: " + Math.ceil(current.wind.speed) + " MPH");
         $("#current_weather").append(windSpeed);
 
