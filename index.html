@@ -9,16 +9,17 @@
     <style>
         h1{color:white; text-align: center;}
         .page-header{padding:5px;}
-        #current_weather{background-color:white; padding:5px; font-size:44px;}
+        #current_weather{background-color; padding:5px; font-size:18px;}
+        .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:5px; border-radius: 5px;}
     </style>
 </head>
 <body>
-    <div class="container-fluid bg-dark">
-        <div class="page-header">
-            <h1>Weather Dashboard</h1>
-        </div>
-        <div class="row">
-            <div class="col-md-3 bg-light">
+    <header class="page-header bg-dark">
+        <h1>Weather Dashboard</h1>
+    </header>
+    <main class="container">
+        <article class="row">
+            <section class="col-md-3 bg-info order-last">
                 <form>
                     <input></input>[search icon]
                 </form>
@@ -29,17 +30,21 @@
                    <li class="list-group-item">Mannheim</li>
                    <li class="list-group-item">London</li>
                 </ul>
-            </div>
-            <div class="col-9">
+            </section>
+            <section class="col order-first">
                 <div class="row" id="current_weather">
                     
                 </div>
-                <div class="row" style="background-color: #beef; font-size:48px;">
-                   [SUN][CLOUD][RAIN][FOG][SUN]
+                <div class="row">
+                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/2020</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
                 </div>
-            </div>
-        </div>
-      </div>
+            </section>
+        </article>
+    </main>
     
 
 <script type="text/javaScript">
@@ -50,24 +55,25 @@ function getWeatherData(city){
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
     $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
         console.log(current);
-        //console.log(current.name); //city name
-        //console.log(current.weather[0].description); //eg scattered clouds
-        //console.log("cloud icon code: " + current.weather[0].icon); //cloud icon
-        //console.log(Math.floor(current.main.temp) + " F"); //imperial in API call.
-        //console.log(current.main.humidity + "% relative humidity"); //humidity
         var lat = current.coord.lat; //for UVI search
         var lon = current.coord.lon; //for UVI search
-       
-       
+
        // uviCall(lat,lon);
        // fiveDayCall(lat,lon);
         var weatherIcon = "<img src =\"https://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">"; //TODO movie icons locally
         $("#current_weather").html(current.name + weatherIcon);
        
+        var temperature = $("<p>");
+        temperature.html("Temperature: " + Math.floor(current.main.temp) + "&#8457");
+        $("#current_weather").append(temperature);
+
         var humidity = $("<p>");
-        humidity.text(current.main.humidity + "% relative humidity");
+        humidity.text("Relative Humidity: " + current.main.humidity + "%");
         $("#current_weather").append(humidity);
 
+        var windSpeed = $("<p>");
+        windSpeed.text("Wind Speed: " + Math.ceil(current.wind.speed) + " MPH");
+        $("#current_weather").append(windSpeed);
 
         
     });
