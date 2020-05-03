@@ -37,9 +37,9 @@
   
                 <ul class="list-group" id="recent-cities">
                    <li class="list-group-item">Minneapolis</li>
-                   <li class="list-group-item">New York</li>
+                   <!-- <li class="list-group-item">New York</li>
                    <li class="list-group-item">Tokyo</li>
-                   <li class="list-group-item">London</li>
+                   <li class="list-group-item">London</li> -->
                 </ul>
             </section>
             <section class="col order-first">
@@ -65,7 +65,7 @@ var city = "Minneapolis"; //TODO set default city to user location
 function getWeatherData(city){
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
     $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
-        console.log(current);
+        //console.log(current);
         var lat = current.coord.lat; //for UVI search
         var lon = current.coord.lon; //for UVI search
 
@@ -129,18 +129,10 @@ console.log(forecast.list[5].main.humidity + "% relative humidity");
 
 getWeatherData(city);
 
-// $(".list-group-item").on("click", function(){
-// //console.log(this);
-  
-// });
-
-
 $(document).on("click", ".list-group-item", function(){
     var city = this.innerHTML;
     getWeatherData(city); 
 } );
-
-
 
 $("button").on("click", function(){
     getWeatherData($("#inputCity").val());
@@ -154,7 +146,6 @@ $(document).on("keypress",function(key) {
     }
 });
 
-
 function saveEntry(city){
     localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
     var newCity = $("<li>");
@@ -163,6 +154,21 @@ function saveEntry(city){
     $("#recent-cities").prepend(newCity);
 }
 
+function loadEntries(){
+    
+    var keys = Object.keys(localStorage);
+    console.log(keys);
+    //for (i=0;i<keys.length; i++) {
+    for(i=keys.length-1; i>=0; i--){
+            var newCity = $("<li>");
+            newCity.addClass("list-group-item");
+            newCity.text(localStorage.getItem(keys[i]));
+            $("#recent-cities").prepend(newCity);
+
+    }
+
+}
+loadEntries();
 
 </script>
 
