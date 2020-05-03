@@ -11,7 +11,7 @@
         h1{color:white; text-align: center;}
         body{background-color: lightblue;}
         .page-header{padding:5px; margin-bottom:10px;}
-        #current_weather{background-color; padding:5px; margin-bottom:10px; font-size:18px;}
+        #current_weather{padding:5px; margin-bottom:10px; font-size:18px;}
         .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:6px; border-radius: 5px; margin-bottom:10px;}
         .cw_details{width:100%;}
         .enbiggin{font-size:40px; font-weight: bolder;}
@@ -35,7 +35,7 @@
                     </div>
                   </div>
   
-                <ul class="list-group">
+                <ul class="list-group" id="recent-cities">
                    <li class="list-group-item">Minneapolis</li>
                    <li class="list-group-item">New York</li>
                    <li class="list-group-item">Tokyo</li>
@@ -127,30 +127,41 @@ console.log(forecast.list[5].main.humidity + "% relative humidity");
 });
 }
 
-
-
 getWeatherData(city);
 
+// $(".list-group-item").on("click", function(){
+// //console.log(this);
+  
+// });
 
-$(".list-group-item").on("click", function(){
-//console.log(this);
-var city = this.innerHTML;
-getWeatherData(city);   
-});
+
+$(document).on("click", ".list-group-item", function(){
+    var city = this.innerHTML;
+    getWeatherData(city); 
+} );
+
+
 
 $("button").on("click", function(){
-    getWeatherData($("#inputCity").val())
+    getWeatherData($("#inputCity").val());
+    saveEntry($("#inputCity").val());
 })
 
 $(document).on("keypress",function(key) {
     if(key.which === 13) {
-        getWeatherData($("#inputCity").val())   
+        getWeatherData($("#inputCity").val());
+        saveEntry($("#inputCity").val());   
     }
 });
 
 
-
-
+function saveEntry(city){
+    localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
+    var newCity = $("<li>");
+    newCity.addClass("list-group-item");
+    newCity.text(city.substr(0,1).toUpperCase()+city.substr(1));
+    $("#recent-cities").prepend(newCity);
+}
 
 
 </script>
