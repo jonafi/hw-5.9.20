@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <style>
         h1{color:white; text-align: center;}
@@ -14,6 +15,7 @@
         .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:6px; border-radius: 5px; margin-bottom:10px;}
         .cw_details{width:100%;}
         .enbiggin{font-size:40px; font-weight: bolder;}
+        .list-group{margin-top:10px;}
     </style>
 </head>
 <body>
@@ -23,14 +25,20 @@
     <main class="container">
         <article class="row">
             <section class="col-md-3 order-last">
-                <form>
-                    <input></input>[mag]
-                </form>
-               <ul class="list-group">
+  
+                <div class="input-group">
+                    <input id="inputCity" type="text" class="form-control" placeholder="Find a city">
+                    <div class="input-group-append">
+                      <button class="btn btn-secondary" type="button">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+  
+                <ul class="list-group">
                    <li class="list-group-item">Minneapolis</li>
                    <li class="list-group-item">New York</li>
                    <li class="list-group-item">Tokyo</li>
-                   <li class="list-group-item">Mannheim</li>
                    <li class="list-group-item">London</li>
                 </ul>
             </section>
@@ -51,7 +59,7 @@
     
 
 <script type="text/javaScript">
-var city = "syosset"; //TODO set default city to user location
+var city = "Minneapolis"; //TODO set default city to user location
 
 
 function getWeatherData(city){
@@ -130,6 +138,15 @@ var city = this.innerHTML;
 getWeatherData(city);   
 });
 
+$("button").on("click", function(){
+    getWeatherData($("#inputCity").val())
+})
+
+$(document).on("keypress",function(key) {
+    if(key.which === 13) {
+        getWeatherData($("#inputCity").val())   
+    }
+});
 
 
 
