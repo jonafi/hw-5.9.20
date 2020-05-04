@@ -12,7 +12,7 @@
         body{background-color: lightblue;}
         .page-header{padding:5px; margin-bottom:10px;}
         #current_weather{padding:5px; margin-bottom:10px; font-size:18px;}
-        .fiveDay{background-color:blue; color:white;  width:18%; margin:1%; padding:6px; border-radius: 5px; margin-bottom:10px;}
+        .fiveDay{background-color:blue; font-size: smaller; color:white;  width:18%; margin:1%; padding:6px; border-radius: 5px; margin-bottom:10px;}
         .cw_details{width:100%;}
         .enbiggin{font-size:40px; font-weight: bolder;}
         .list-group{margin-top:10px;}
@@ -47,12 +47,12 @@
             <section class="col order-first">
                 <div class="row" id="current_weather">
                 </div>
-                <div class="row">
+                <div class="row" id="forecast_weather">
+                   <!-- <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
                    <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
                    <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
                    <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
-                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
+                   <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div> -->
                 </div>
             </section>
         </article>
@@ -67,8 +67,8 @@ function getWeatherData(city){
         var lat = current.coord.lat; //for UVI search
         var lon = current.coord.lon; //for UVI search
 
-        uviCall(lat,lon);
-       // fiveDayCall(lat,lon);
+       // uviCall(lat,lon);
+        fiveDayCall(lat,lon);
         var displayName = $("<div>");
         displayName.addClass("cw_details");
         displayName.addClass("enbiggin");
@@ -103,7 +103,6 @@ $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
     uvIndex.text("UV Index: ");
     var uvAlert = $("<span>");
     uvAlert.addClass("uvBox")
-    console.log(typeof uviInfo.value)
     if(uviInfo.value>5){
         uvAlert.addClass("uvHigh");
         }
@@ -120,18 +119,48 @@ $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
 }
 
 function fiveDayCall(lat,lon){
-var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
+var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
-console.log("----------5 day forecast----------------")
-console.log(forecast.list[0].dt_txt);
-console.log(forecast.list[0].weather[0].icon);
-console.log(forecast.list[0].main.feels_like);
-console.log(forecast.list[0].main.humidity + "% relative humidity");
-console.log("---------day 2 --------------------")
-console.log(forecast.list[5].dt_txt);
-console.log(forecast.list[5].weather[0].icon);
-console.log(forecast.list[5].main.feels_like);
-console.log(forecast.list[5].main.humidity + "% relative humidity");
+
+for(i=3;i<40;i+=8){
+    var forecastBubble = $("<div>");
+    forecastBubble.addClass("fiveDay");
+    var dateSpan = $("<span>");
+    dateSpan.text(forecast.list[i].dt_txt);
+    forecastBubble.append(dateSpan);
+    var forecastIcon = $("<img>");
+    forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png")
+    forecastBubble.append(forecastIcon);
+    $("#forecast_weather").append(forecastBubble);
+}
+
+// console.log(forecast);
+// console.log("----------5 day forecast----------------")
+// console.log(forecast.list[3].dt_txt);
+// console.log(forecast.list[3].weather[0].icon);
+// console.log(forecast.list[3].main.feels_like);
+// console.log(forecast.list[3].main.humidity + "% relative humidity");
+// console.log("---------day 2 --------------------")
+// console.log(forecast.list[11].dt_txt);
+// console.log(forecast.list[11].weather[0].icon);
+// console.log(forecast.list[11].main.feels_like);
+// console.log(forecast.list[11].main.humidity + "% relative humidity");
+// console.log("------- day 3  ----------------")
+// console.log(forecast.list[19].dt_txt);
+// console.log(forecast.list[19].weather[0].icon);
+// console.log(forecast.list[19].main.feels_like);
+// console.log(forecast.list[19].main.humidity + "% relative humidity");
+// console.log("---------day 4 --------------------")
+// console.log(forecast.list[27].dt_txt);
+// console.log(forecast.list[27].weather[0].icon);
+// console.log(forecast.list[27].main.feels_like);
+// console.log(forecast.list[27].main.humidity + "% relative humidity");
+// console.log("----------day 5 ---------------")
+// console.log(forecast.list[35].dt_txt);
+// console.log(forecast.list[35].weather[0].icon);
+// console.log(forecast.list[35].main.feels_like);
+// console.log(forecast.list[35].main.humidity + "% relative humidity");
+
 });
 }
 
