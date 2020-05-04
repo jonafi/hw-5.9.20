@@ -119,6 +119,8 @@ $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
 }
 
 function fiveDayCall(lat,lon){
+    //clear last one if any
+    $("#forecast_weather").empty();
 var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
 
@@ -131,6 +133,7 @@ for(i=3;i<40;i+=8){
     var forecastIcon = $("<img>");
     forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png")
     forecastBubble.append(forecastIcon);
+
     $("#forecast_weather").append(forecastBubble);
 }
 
