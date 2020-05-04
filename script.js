@@ -86,20 +86,24 @@
         getWeatherData(city); 
     } );
     
-    $("button").on("click", function(){
+
+    
+    $(document).on("click", "button",  function(){
         getWeatherData($("#inputCity").val());
         saveEntry($("#inputCity").val());
+        $("#inputCity").val(""); 
     })
     
     $(document).on("keypress",function(key) {
         if(key.which === 13) {
             getWeatherData($("#inputCity").val());
-            saveEntry($("#inputCity").val());   
+            saveEntry($("#inputCity").val());  
+            $("#inputCity").val(""); 
         }
     });
     
     function saveEntry(city){
-        localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
+        //localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
         var newCity = $("<li>");
         newCity.addClass("list-group-item");
         newCity.text(city.substr(0,1).toUpperCase()+city.substr(1));
@@ -120,4 +124,4 @@
     getWeatherData(city);
     loadEntries();
     
-    console.log(moment("2020-05-08").format('dddd'))
+   // console.log(moment("2020-05-08").format('dddd'))
