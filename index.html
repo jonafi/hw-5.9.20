@@ -16,6 +16,10 @@
         .cw_details{width:100%;}
         .enbiggin{font-size:40px; font-weight: bolder;}
         .list-group{margin-top:10px;}
+        .uvLow{background-color: limegreen;}
+        .uvMid{background-color:yellow;}
+        .uvHigh{background-color: red;}
+        .uvBox{padding:3px;border-radius: 4px;}
     </style>
 </head>
 <body>
@@ -25,8 +29,7 @@
     <main class="container">
         <article class="row">
             <section class="col-md-3 order-last">
-  
-                <div class="input-group">
+                  <div class="input-group">
                     <input id="inputCity" type="text" class="form-control" placeholder="Find a city">
                     <div class="input-group-append">
                       <button class="btn btn-secondary" type="button">
@@ -34,8 +37,7 @@
                       </button>
                     </div>
                   </div>
-  
-                <ul class="list-group" id="recent-cities">
+                  <ul class="list-group" id="recent-cities">
                    <li class="list-group-item">Minneapolis</li>
                    <!-- <li class="list-group-item">New York</li>
                    <li class="list-group-item">Tokyo</li>
@@ -44,7 +46,6 @@
             </section>
             <section class="col order-first">
                 <div class="row" id="current_weather">
-                    
                 </div>
                 <div class="row">
                    <div class="fiveDay"><b>10/10/20</b><br>ICON<br>TEMP<br>HUMIDITY</b></div>
@@ -56,30 +57,24 @@
             </section>
         </article>
     </main>
-    
-
+ 
 <script type="text/javaScript">
 var city = "Minneapolis"; //TODO set default city to user location
-
 
 function getWeatherData(city){
     var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
     $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
-        //console.log(current);
         var lat = current.coord.lat; //for UVI search
         var lon = current.coord.lon; //for UVI search
 
-       // uviCall(lat,lon);
+        uviCall(lat,lon);
        // fiveDayCall(lat,lon);
-           
         var displayName = $("<div>");
         displayName.addClass("cw_details");
         displayName.addClass("enbiggin");
         displayName.text(current.name);
-
-    
         $("#current_weather").html(displayName);
-       
+
         var weatherIcon = "<img src =\"https://openweathermap.org/img/wn/"+current.weather[0].icon+"@2x.png\">"; //TODO movie icons locally
         $("#current_weather").append(weatherIcon);
 
@@ -90,26 +85,39 @@ function getWeatherData(city){
 
         var humidity = $("<div>");
         humidity.addClass("cw_details")
-        humidity.text("Relative Humidity: " + current.main.humidity + "%");
+        humidity.text("Humidity: " + current.main.humidity + "%");
         $("#current_weather").append(humidity);
 
         var windSpeed = $("<div>");
         windSpeed.addClass("cw_details");
         windSpeed.text("Wind Speed: " + Math.ceil(current.wind.speed) + " MPH");
         $("#current_weather").append(windSpeed);
-
-        
     });
 };
 
 function uviCall(lat,lon){
 var uvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
 $.ajax({url: uvi, method: "GET"}).then(function(uviInfo) {
-console.log("------UV INDEX---------")
-console.log("UV index: " + uviInfo.value);
+    var uvIndex = $("<div>");
+    uvIndex.addClass("cw_details");
+    uvIndex.text("UV Index: ");
+    var uvAlert = $("<span>");
+    uvAlert.addClass("uvBox")
+    console.log(typeof uviInfo.value)
+    if(uviInfo.value>5){
+        uvAlert.addClass("uvHigh");
+        }
+    else if(uviInfo.value<3){
+        uvAlert.addClass("uvLow");
+        }
+    else{
+        uvAlert.addClass("uvMid");
+        }
+    uvAlert.text(uviInfo.value);
+    uvIndex.append(uvAlert);
+    $("#current_weather").append(uvIndex);
 });
 }
-
 
 function fiveDayCall(lat,lon){
 var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=20&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
@@ -126,8 +134,6 @@ console.log(forecast.list[5].main.feels_like);
 console.log(forecast.list[5].main.humidity + "% relative humidity");
 });
 }
-
-getWeatherData(city);
 
 $(document).on("click", ".list-group-item", function(){
     var city = this.innerHTML;
@@ -155,22 +161,18 @@ function saveEntry(city){
 }
 
 function loadEntries(){
-    
     var keys = Object.keys(localStorage);
-    console.log(keys);
+    //console.log(keys.length);
     //for (i=0;i<keys.length; i++) {
     for(i=keys.length-1; i>=0; i--){
             var newCity = $("<li>");
             newCity.addClass("list-group-item");
             newCity.text(localStorage.getItem(keys[i]));
             $("#recent-cities").prepend(newCity);
-
     }
-
 }
+getWeatherData(city);
 loadEntries();
-
 </script>
-
 </body>
 </html>
