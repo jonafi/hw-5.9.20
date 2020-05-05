@@ -1,3 +1,8 @@
+$( document ).ready(function() {
+    // Handler for .ready() called.
+
+    
+    
     var city = "Minneapolis"; //TODO set default city to user location
     
     function getWeatherData(city){
@@ -56,7 +61,7 @@
     });
     }
     
-    function fiveDayCall(lat,lon){
+    function fiveDayCall(lat,lon){  //TODO shrink icon size, recalculate date/timestamp more accuately with moment.js
         $("#forecast_weather").empty(); 
         var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
@@ -65,7 +70,6 @@
                 forecastBubble.addClass("fiveDay");
                 var dateSpan = $("<div>");
                 dateSpan.text(moment(forecast.list[i].dt_txt).format("dddd"));
-                //console.log(forecast.list[i].dt_txt);
                 forecastBubble.append(dateSpan);
                 var forecastIcon = $("<img>");
                 forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png")
@@ -86,8 +90,6 @@
         getWeatherData(city); 
     } );
     
-
-    
     $(document).on("click", "button",  function(){
         getWeatherData($("#inputCity").val());
         saveEntry($("#inputCity").val());
@@ -102,26 +104,30 @@
         }
     });
     
-    function saveEntry(city){
-        //localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
+    function saveEntry(city){ //TODO change how cities are stored to prevent weird shuffling
+        localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
         var newCity = $("<li>");
         newCity.addClass("list-group-item");
         newCity.text(city.substr(0,1).toUpperCase()+city.substr(1));
         $("#recent-cities").prepend(newCity);
     }
     
-    function loadEntries(){
+    function loadEntries(){  //TODO change how cities are stored to prevent weird shuffling
         var keys = Object.keys(localStorage);
-        //console.log(keys.length);
-        //for (i=0;i<keys.length; i++) {
-        for(i=keys.length-1; i>=0; i--){
-                var newCity = $("<li>");
-                newCity.addClass("list-group-item");
-                newCity.text(localStorage.getItem(keys[i]));
-                $("#recent-cities").prepend(newCity);
+        
+        for (i=0;i<keys.length; i++) {
+        //for(i=keys.length-1; i>=0; i--){
+            var newCity = $("<li>");
+            newCity.addClass("list-group-item");
+            newCity.text(keys[i]);
+            $("#recent-cities").prepend(newCity);
         }
     }
+
+
+
+    
     getWeatherData(city);
     loadEntries();
-    
-   // console.log(moment("2020-05-08").format('dddd'))
+
+});
