@@ -1,8 +1,4 @@
 $( document ).ready(function() {
-    // Handler for .ready() called.
-
-    
-    
     var city = "Minneapolis"; //TODO set default city to user location
     
     function getWeatherData(city){
@@ -61,7 +57,7 @@ $( document ).ready(function() {
     });
     }
     
-    function fiveDayCall(lat,lon){  //TODO shrink icon size, recalculate date/timestamp more accuately with moment.js
+    function fiveDayCall(lat,lon){  //TODO recalculate date/timestamp more accuately with moment.js
         $("#forecast_weather").empty(); 
         var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
@@ -72,7 +68,8 @@ $( document ).ready(function() {
                 dateSpan.text(moment(forecast.list[i].dt_txt).format("dddd"));
                 forecastBubble.append(dateSpan);
                 var forecastIcon = $("<img>");
-                forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png")
+                forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png");
+                forecastIcon.addClass("miniIcon");
                 forecastBubble.append(forecastIcon);
                 var forecastTemp = $("<div>");
                 forecastTemp.html("Temp: " + Math.floor(forecast.list[i].main.temp) + "&deg;");
@@ -123,10 +120,7 @@ $( document ).ready(function() {
             $("#recent-cities").prepend(newCity);
         }
     }
-
-
-
-    
+   
     getWeatherData(city);
     loadEntries();
 
