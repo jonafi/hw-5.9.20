@@ -65,7 +65,7 @@ $( document ).ready(function() {
                 var forecastBubble = $("<div>");
                 forecastBubble.addClass("fiveDay");
                 var dateSpan = $("<div>");
-                dateSpan.text(moment(forecast.list[i].dt_txt).format("dddd"));
+                dateSpan.text(moment(forecast.list[i].dt_txt).format("ddd"));
                 forecastBubble.append(dateSpan);
                 var forecastIcon = $("<img>");
                 forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png");
