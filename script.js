@@ -1,6 +1,22 @@
 $( document ).ready(function() {
-    var city = "Minneapolis"; //TODO set default city to user location
-    
+
+    var city="Minneapolis"; //Default city if location call fails.
+
+    if ("geolocation" in navigator){ 
+    navigator.geolocation.getCurrentPosition(function(position){ 
+        var userCity = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://us1.locationiq.com/v1/reverse.php?key=8f1fc454d65237&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&format=json",
+        "method": "GET"
+        }
+        
+        $.ajax(userCity).done(function (userLocation) {
+        var city = userLocation.address.city;
+        getWeatherData(city);
+    });
+    });}
+
     function getWeatherData(city){
         var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
