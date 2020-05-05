@@ -1,7 +1,10 @@
 $( document ).ready(function() {
 
-    var city="Minneapolis"; //Default city if location call fails.
+    var city="MINNEAPOLIS"; //Default city if location call fails.
+    var keys = Object.keys(localStorage);
+    var cityListLength=keys.length;
 
+    
     if ("geolocation" in navigator){ 
     navigator.geolocation.getCurrentPosition(function(position){ 
         var userCity = {
@@ -19,7 +22,11 @@ $( document ).ready(function() {
 
     function getWeatherData(city){
         var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
-        $.ajax({url: currentWeather, method: "GET"}).then(function(current) {
+        $.ajax({url: currentWeather, method: "GET",
+                error:function(){  
+                    alert('No Matching City Found!');
+                }}
+                ).then(function(current) {
             var lat = current.coord.lat;
             var lon = current.coord.lon; 
             uviCall(lat,lon);
@@ -131,26 +138,34 @@ $( document ).ready(function() {
     });
     
     function saveEntry(city){ //TODO change how cities are stored to prevent weird shuffling
-        localStorage.setItem(city,city.substr(0,1).toUpperCase()+city.substr(1));
-        var newCity = $("<li>");
-        newCity.addClass("list-group-item");
-        newCity.text(city.substr(0,1).toUpperCase()+city.substr(1));
-        $("#recent-cities").prepend(newCity);
+   
+            localStorage.setItem(cityListLength,city.toUpperCase());
+            var newCity = $("<li>");
+            newCity.addClass("list-group-item");
+            newCity.text(city.toUpperCase());
+            $("#recent-cities").prepend(newCity);
+            cityListLength++;
     }
     
     function loadEntries(){  //TODO change how cities are stored to prevent weird shuffling
-        var keys = Object.keys(localStorage);
+        
         
         for (i=0;i<keys.length; i++) {
         //for(i=keys.length-1; i>=0; i--){
             var newCity = $("<li>");
             newCity.addClass("list-group-item");
-            newCity.text(keys[i]);
+            newCity.text(localStorage.getItem(i));
             $("#recent-cities").prepend(newCity);
         }
     }
-   
-    getWeatherData(city);
+    
+    
+
+
+
     loadEntries();
+    getWeatherData(city);
+    
+
 
 });
