@@ -74,27 +74,40 @@ $( document ).ready(function() {
     }
     
     function fiveDayCall(lat,lon){  //TODO recalculate date/timestamp more accuately with moment.js
+      
+
         $("#forecast_weather").empty(); 
         var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
-            for(i=6;i<40;i+=8){
-                var forecastBubble = $("<div>");
-                forecastBubble.addClass("fiveDay");
-                var dateSpan = $("<div>");
-                dateSpan.text(moment(forecast.list[i].dt_txt).format("ddd"));
-                forecastBubble.append(dateSpan);
-                var forecastIcon = $("<img>");
-                forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png");
-                forecastIcon.addClass("miniIcon");
-                forecastBubble.append(forecastIcon);
-                var forecastTemp = $("<div>");
-                forecastTemp.html("Temp: " + Math.floor(forecast.list[i].main.temp) + "&deg;");
-                forecastBubble.append(forecastTemp);
-                var forecastHumidity = $("<div>");
-                forecastHumidity.text("RH: " + forecast.list[i].main.humidity + "%");
-                forecastBubble.append(forecastHumidity);
-                $("#forecast_weather").append(forecastBubble);
+
+
+      /// caluclate 5 day forecast start time for noon the following day
+      var tomorrowTime = (moment().add(1,"days").format("YYYY[-]MM[-]DD"));
+      tomorrowTime = tomorrowTime.concat(" 12:00:00");
+      for(i=0;i<8;i++){
+          if(tomorrowTime===forecast.list[i].dt_txt){
+              var startingIndex = i;
             }
+      }
+        for(i=startingIndex;i<40;i+=8){
+            var forecastBubble = $("<div>");
+        forecastBubble.addClass("fiveDay");
+        var dateSpan = $("<div>");
+        dateSpan.text(moment(forecast.list[i].dt_txt).format("ddd"));
+        //dateSpan.text(moment(forecast.list[i].dt_txt)); 
+        forecastBubble.append(dateSpan);
+        var forecastIcon = $("<img>");
+        forecastIcon.attr("src", "https://openweathermap.org/img/wn/" + forecast.list[i].weather[0].icon + "@2x.png");
+        forecastIcon.addClass("miniIcon");
+        forecastBubble.append(forecastIcon);
+        var forecastTemp = $("<div>");
+        forecastTemp.html("Temp: " + Math.floor(forecast.list[i].main.temp) + "&deg;");
+        forecastBubble.append(forecastTemp);
+        var forecastHumidity = $("<div>");
+        forecastHumidity.text("RH: " + forecast.list[i].main.humidity + "%");
+        forecastBubble.append(forecastHumidity);
+        $("#forecast_weather").append(forecastBubble);
+    }
     });
     }
     
