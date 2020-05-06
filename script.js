@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 
-    var city="MINNEAPOLIS"; //Default city if location call fails.
+    
     var keys = Object.keys(localStorage); //Used for reading existing saved cities
     var cityListLength=keys.length; //Used with loading cities in order
     
@@ -13,20 +13,27 @@ $( document ).ready(function() {
         "url": "https://us1.locationiq.com/v1/reverse.php?key=8f1fc454d65237&lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&format=json",
         "method": "GET"
         }
+    
 
         $.ajax(userCity).done(function (userLocation) {
             var city = userLocation.address.city;
             getWeatherData(city);
         });
     });}
+    else{
+        var city="MINNEAPOLIS"; //Default city if location call fails.
+    }
 //Make OWM API call and populate main window
     function getWeatherData(city){
         var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: currentWeather, method: "GET",
             error:function(){  
                 alert('No Matching City Found!');
+               
             }
         }).then(function(current) {
+            
+            
             var lat = current.coord.lat;
             var lon = current.coord.lon; 
             uviCall(lat,lon);
@@ -54,6 +61,8 @@ $( document ).ready(function() {
             windSpeed.addClass("cw_details");
             windSpeed.text("Wind Speed: " + Math.ceil(current.wind.speed) + " MPH");
             $("#current_weather").append(windSpeed);
+
+ 
         });
     };
 //Get UV index data, colorcode and display
@@ -113,6 +122,7 @@ $( document ).ready(function() {
     }
 //Save searches to Local storage, add index numer to prevent weird shuffling bug
     function saveEntry(city){ //TODO prevent blank and invalid cities
+        console.log(validCity)
         localStorage.setItem(cityListLength,city.toUpperCase());
         var newCity = $("<li>");
         newCity.addClass("list-group-item");
@@ -143,6 +153,7 @@ $( document ).ready(function() {
 //Event listner for ENTER key
     $(document).on("keypress",function(key) {
         if(key.which === 13) {
+            console.log(current.cod)
             getWeatherData($("#inputCity").val());
             saveEntry($("#inputCity").val());  
             $("#inputCity").val(""); 
@@ -150,5 +161,5 @@ $( document ).ready(function() {
     });
 //GO!
     loadEntries();
-    getWeatherData(city);
+    //getWeatherData(city);
 });
