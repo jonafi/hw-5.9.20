@@ -27,10 +27,11 @@ $( document ).ready(function() {
     function getWeatherData(city){
         var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: currentWeather, method: "GET",
-            error:function(){  
-                alert('No Matching City Found!');
-               
-            }
+                // statusCode:{
+                // 404:function(){alert('404 detected, no matching city')},
+                // 400:function(){alert('400 detected, blank input')},
+                // 200:function(){alert('200 detected, all good')}
+                // }
         }).then(function(current) {
             
             
@@ -122,7 +123,6 @@ $( document ).ready(function() {
     }
 //Save searches to Local storage, add index numer to prevent weird shuffling bug
     function saveEntry(city){ //TODO prevent blank and invalid cities
-        console.log(validCity)
         localStorage.setItem(cityListLength,city.toUpperCase());
         var newCity = $("<li>");
         newCity.addClass("list-group-item");
@@ -153,7 +153,6 @@ $( document ).ready(function() {
 //Event listner for ENTER key
     $(document).on("keypress",function(key) {
         if(key.which === 13) {
-            console.log(current.cod)
             getWeatherData($("#inputCity").val());
             saveEntry($("#inputCity").val());  
             $("#inputCity").val(""); 
