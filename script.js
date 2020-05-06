@@ -20,9 +20,7 @@ $( document ).ready(function() {
             getWeatherData(city);
         });
     });}
-    else{
-        var city="MINNEAPOLIS"; //Default city if location call fails.
-    }
+
 //Make OWM API call and populate main window
     function getWeatherData(city){
         var currentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&APPID=bb531b33379b545d3e2ce5f79f354951"
@@ -32,9 +30,8 @@ $( document ).ready(function() {
                 // 400:function(){alert('400 detected, blank input')},
                 // 200:function(){alert('200 detected, all good')}
                 // }
+                
         }).then(function(current) {
-            
-            
             var lat = current.coord.lat;
             var lon = current.coord.lon; 
             uviCall(lat,lon);
@@ -92,6 +89,7 @@ $( document ).ready(function() {
 //Calucate tomorrow and search for tommorrow Noon weather, loop 5 days
     function fiveDayCall(lat,lon){
         $("#forecast_weather").empty(); 
+        $(".fiveDayHeader").text("5 Day Forecast");
         var fiveDay = "https://api.openweathermap.org/data/2.5/forecast?cnt=40&units=imperial&lat=" + lat + "&lon=" + lon +"&APPID=bb531b33379b545d3e2ce5f79f354951"
         $.ajax({url: fiveDay, method: "GET"}).then(function(forecast) {
             var tomorrowTime = (moment().add(1,"days").format("YYYY[-]MM[-]DD"));
