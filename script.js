@@ -121,12 +121,14 @@ $( document ).ready(function() {
     }
 //Save searches to Local storage, add index numer to prevent weird shuffling bug
     function saveEntry(city){ //TODO prevent blank and invalid cities
-        localStorage.setItem(cityListLength,city.toUpperCase());
-        var newCity = $("<li>");
-        newCity.addClass("list-group-item");
-        newCity.text(city.toUpperCase());
-        $("#recent-cities").prepend(newCity);
-        cityListLength++;
+        if(city!==""){
+            localStorage.setItem(cityListLength,city.toUpperCase());
+            var newCity = $("<li>");
+            newCity.addClass("list-group-item");
+            newCity.text(city.toUpperCase());
+            $("#recent-cities").prepend(newCity);
+            cityListLength++;
+        }
     }
 //Load past searches from Local storage, uses index number to prevent weird shuffling bug
     function loadEntries(){  //TODO prevent blank and invalid cities

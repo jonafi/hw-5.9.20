@@ -10,4 +10,4 @@ Weather Dashboard
 - Gluten Free!
 
 #Bugs:
-- Can not prevent blank and invalid city names from being stored in queue :-/
+- Can not prevent invalid city names from being stored in queue :-/
