@@ -1,5 +1,4 @@
-# hw-5.9.20
-Weather Dashboard
+# Weather Dashboard
 
 #Features:
 - Automatically detects user location using navigator.geolocation.getCurrentPosition and locationiq API
